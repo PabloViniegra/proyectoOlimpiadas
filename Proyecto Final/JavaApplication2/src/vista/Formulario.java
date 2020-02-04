@@ -17,6 +17,9 @@ public class Formulario {
 
     public void menu() {
         Scanner sc = new Scanner(System.in);
+        Formulario f1 = new Formulario();
+        Deportista d1 = new Deportista();
+        Medalla m1 = new Medalla();
         byte numusuario;
         do {
             System.out.println("________MENÚ________");
@@ -32,7 +35,9 @@ public class Formulario {
 
             switch (numusuario) {
                 case 1:
-                    System.out.println("Lorem Ipsum");
+                    d1=f1.pideDatosDeportista();
+                    m1=f1.pideDatosMedalla();
+                    f1.muestraDatos(d1, m1);
                     break;
                 case 2:
                     System.out.println("Lorem Ipsum");
