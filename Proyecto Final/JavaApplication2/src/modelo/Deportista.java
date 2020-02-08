@@ -10,20 +10,27 @@ package modelo;
  * @author pablo
  */
 public class Deportista {
+
     //Declaración de atributos de la clase Deportista
     private String nombre;
     private String pais;
     private short numMedallas;
- 
-    
+
     //Constructor por defecto
-    public Deportista () {
+    public Deportista() {
         nombre = "";
         pais = "";
         numMedallas = 0;
-       
+
     }
-    
+
+    //Constructor con parámetros
+    public Deportista(String nombre, String pais, short numMedallas) {
+        this.nombre = nombre;
+        this.pais = pais;
+        this.numMedallas = numMedallas;
+    }
+
     //Getters and Setters
     public String getNombre() {
         return nombre;
@@ -49,6 +56,4 @@ public class Deportista {
         this.numMedallas = numMedallas;
     }
 
-   
-    
 }

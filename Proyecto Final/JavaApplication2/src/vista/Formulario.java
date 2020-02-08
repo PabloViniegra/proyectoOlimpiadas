@@ -9,6 +9,7 @@ import java.util.Scanner;
 import modelo.Deportista;
 import modelo.Medalla;
 
+
 /**
  *
  * @author pablo
@@ -59,7 +60,7 @@ public class Formulario {
     public Deportista pideDatosDeportista() {
         Deportista d1 = new Deportista();
         Scanner sc = new Scanner(System.in);
-
+        Tipo t1 = 
         System.out.print("Introduce el nombre del deportista: ");
         d1.setNombre(sc.nextLine());
         System.out.print("Introduce su país: ");
@@ -73,14 +74,26 @@ public class Formulario {
     public Medalla pideDatosMedalla() {
         Medalla m1 = new Medalla();
         Scanner sc = new Scanner(System.in);
-
+        int aux;
         System.out.println("_______Menú de medallas_______");
         System.out.print("País de la Olimpiada: ");
         m1.setPais(sc.nextLine());
         System.out.print("Introduce el año: ");
         m1.setAnio(sc.nextShort());
-        System.out.print("¿Qué tipo de medalla es?: ");
-        m1.setTipoMedalla(sc.nextLine());
+        System.out.print("¿Qué tipo de medalla es? Marque su numero");
+        System.out.println("1. ORO");
+        System.out.println("2. PLATA");
+        System.out.println("3. BRONCE");
+        aux = sc.nextInt();
+        if (aux == 1) {
+            
+        } else if ( aux == 2) {
+            
+        } else if ( aux == 3) {
+            
+        } else {
+            System.out.println("Dato Incorrecto");
+        }
         System.out.println("____________________________");
         return m1;
     }

@@ -13,13 +13,22 @@ public class Medalla {
     //Atributos de la clase Medalla
     private String pais;
     private short anio;
-    private String tipoMedalla;
+    public enum Tipo {
+        ORO,PLATA,BRONCE
+    }
     
     //Constructor por defecto
     public Medalla () {
         pais = "";
         anio = 0;
-        tipoMedalla = "";
+        Tipo = "Ninguno";
+    }
+    
+    //Constructor con parámetros
+    public Medalla (String pais, short anio, Tipo tipo) {
+        this.pais=pais;
+        this.anio=anio;
+        this.Tipo=tipo;
     }
     
     //Getters and Setters
@@ -39,12 +48,5 @@ public class Medalla {
         this.anio = anio;
     }
 
-    public String getTipoMedalla() {
-        return tipoMedalla;
-    }
-
-    public void setTipoMedalla(String tipoMedalla) {
-        this.tipoMedalla = tipoMedalla;
-    }
     
 }
