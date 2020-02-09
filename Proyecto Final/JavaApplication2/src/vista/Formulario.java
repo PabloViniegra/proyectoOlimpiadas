@@ -8,6 +8,7 @@ package vista;
 import java.util.Scanner;
 import modelo.Deportista;
 import modelo.Medalla;
+import modelo.Medalla.Tipo;
 
 
 /**
@@ -36,9 +37,7 @@ public class Formulario {
 
             switch (numusuario) {
                 case 1:
-                    d1=f1.pideDatosDeportista();
-                    m1=f1.pideDatosMedalla();
-                    f1.muestraDatos(d1, m1);
+                   
                     break;
                 case 2:
                     System.out.println("Lorem Ipsum");
@@ -60,13 +59,18 @@ public class Formulario {
     public Deportista pideDatosDeportista() {
         Deportista d1 = new Deportista();
         Scanner sc = new Scanner(System.in);
-        Tipo t1 = 
+         
         System.out.print("Introduce el nombre del deportista: ");
         d1.setNombre(sc.nextLine());
         System.out.print("Introduce su país: ");
         d1.setPais(sc.nextLine());
         System.out.print("¿Cuántas medallas tiene?: ");
         d1.setNumMedallas(sc.nextShort());
+        if (d1.getNumMedallas()>0) {
+            Medalla miMedalla = new Medalla ();
+            Formulario miFormulario = new Formulario ();
+            miMedalla= miFormulario.pideDatosMedalla();
+        }
         System.out.println("____________________________");
         return d1;
     }
@@ -86,11 +90,14 @@ public class Formulario {
         System.out.println("3. BRONCE");
         aux = sc.nextInt();
         if (aux == 1) {
-            
+            Tipo tipo = Tipo.ORO;
+            System.out.println("Has seleccionado " + tipo.toString());
         } else if ( aux == 2) {
-            
+            Tipo tipo = Tipo.PLATA;
+            System.out.println("Has seleccionado " + tipo.toString());
         } else if ( aux == 3) {
-            
+            Tipo tipo = Tipo.BRONCE;
+            System.out.println("Has seleccionado " + tipo.toString());
         } else {
             System.out.println("Dato Incorrecto");
         }
@@ -105,7 +112,7 @@ public class Formulario {
         System.out.println("Ahora la medalla:");
         System.out.println("País de la Olimpiada: " + m.getPais());
         System.out.println("Año: " + m.getAnio());
-        System.out.println("Tipo de medalla: " + m.getTipoMedalla());
+        System.out.println("Tipo de medalla: " + m.);
         System.out.println("____________________________");
     }
 }

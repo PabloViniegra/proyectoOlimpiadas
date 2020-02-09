@@ -21,14 +21,14 @@ public class Medalla {
     public Medalla () {
         pais = "";
         anio = 0;
-        Tipo = "Ninguno";
+        
     }
     
     //Constructor con parámetros
     public Medalla (String pais, short anio, Tipo tipo) {
         this.pais=pais;
         this.anio=anio;
-        this.Tipo=tipo;
+        
     }
     
     //Getters and Setters
