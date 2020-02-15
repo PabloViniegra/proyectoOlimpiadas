@@ -5,6 +5,8 @@
  */
 package vista;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.Scanner;
 import modelo.Deportista;
 import modelo.Medalla;
@@ -72,6 +74,25 @@ public class Formulario {
             miMedalla= miFormulario.pideDatosMedalla();
         }
         System.out.println("____________________________");
+        
+        try {
+            File archivo = new File(d1.getNombre()+".olimpiadas");
+            if (archivo.createNewFile()) {
+                System.out.println("Archivo creado: " + archivo.getName());
+            } else {
+                System.out.println("El archivo ya existe");
+            }
+            
+            FileWriter escribir = new FileWriter(archivo);
+            escribir.write(d1.getNombre());
+            escribir.write(d1.getPais());
+            escribir.write(d1.getNumMedallas());
+            System.out.println("Se ha escrito el fichero con éxito");
+        } catch (IOException e) {
+            System.out.println("Un error ha ocurrido de tipo IOException");
+            Formulario form = new Formulario();
+            form.pideDatosDeportista();
+        }
         return d1;
     }
 
@@ -89,19 +110,33 @@ public class Formulario {
         System.out.println("2. PLATA");
         System.out.println("3. BRONCE");
         aux = sc.nextInt();
-        if (aux == 1) {
-            Tipo tipo = Tipo.ORO;
-            System.out.println("Has seleccionado " + tipo.toString());
-        } else if ( aux == 2) {
-            Tipo tipo = Tipo.PLATA;
-            System.out.println("Has seleccionado " + tipo.toString());
-        } else if ( aux == 3) {
-            Tipo tipo = Tipo.BRONCE;
-            System.out.println("Has seleccionado " + tipo.toString());
-        } else {
-            System.out.println("Dato Incorrecto");
+        switch (aux) {
+            case 1:
+                {
+                    Tipo tipo = Tipo.ORO;
+                    System.out.println("Has seleccionado " + tipo.toString());
+                    break;
+                }
+            case 2:
+                {
+                    Tipo tipo = Tipo.PLATA;
+                    System.out.println("Has seleccionado " + tipo.toString());
+                    break;
+                }
+            case 3:
+                {
+                    Tipo tipo = Tipo.BRONCE;
+                    System.out.println("Has seleccionado " + tipo.toString());
+                    break;
+                }
+            default:
+                System.out.println("Dato Incorrecto");
+                break;
         }
         System.out.println("____________________________");
+        
+        
+        
         return m1;
     }
     public void muestraDatos ( Deportista d, Medalla m) {
@@ -112,7 +147,7 @@ public class Formulario {
         System.out.println("Ahora la medalla:");
         System.out.println("País de la Olimpiada: " + m.getPais());
         System.out.println("Año: " + m.getAnio());
-        System.out.println("Tipo de medalla: " + m.);
+        System.out.println("Tipo de medalla: " + tipo.toString);
         System.out.println("____________________________");
     }
 }

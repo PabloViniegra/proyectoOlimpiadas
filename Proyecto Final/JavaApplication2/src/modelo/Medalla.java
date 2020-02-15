@@ -5,11 +5,13 @@
  */
 package modelo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author pablo.viniegra
  */
-public class Medalla {
+public class Medalla implements Serializable {
     //Atributos de la clase Medalla
     private String pais;
     private short anio;

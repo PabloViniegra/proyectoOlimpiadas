@@ -5,11 +5,13 @@
  */
 package modelo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author pablo
  */
-public class Deportista {
+public class Deportista implements Serializable{
 
     //Declaración de atributos de la clase Deportista
     private String nombre;
