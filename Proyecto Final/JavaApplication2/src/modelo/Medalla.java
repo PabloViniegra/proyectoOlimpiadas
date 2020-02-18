@@ -17,11 +17,12 @@ public class Medalla implements Serializable {
     private short anio;
     public enum Tipo {
         ORO,PLATA,BRONCE
+        
     }
     
     //Constructor por defecto
     public Medalla () {
-        pais = "";
+        pais = "vacio";
         anio = 0;
         
     }

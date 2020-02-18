@@ -6,24 +6,27 @@
 package modelo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  *
  * @author pablo
  */
-public class Deportista implements Serializable{
+public class Deportista implements Serializable {
 
     //Declaración de atributos de la clase Deportista
     private String nombre;
     private String pais;
     private short numMedallas;
+    
+    //ArrayList de medallas
+    ArrayList<Medalla> arrMedallas = new ArrayList<>();
 
     //Constructor por defecto
     public Deportista() {
-        nombre = "";
-        pais = "";
+        nombre = "vacío";
+        pais = "vacío";
         numMedallas = 0;
-
     }
 
     //Constructor con parámetros

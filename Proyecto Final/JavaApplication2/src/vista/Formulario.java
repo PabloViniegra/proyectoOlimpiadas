@@ -7,9 +7,11 @@ package vista;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -22,9 +24,7 @@ import modelo.Medalla.Tipo;
  * @author pablo
  */
 public class Formulario {
-    //El array global para almacenar los Objetos de la clase Deportista
-    ArrayList<Deportista> listaDeportistas = new ArrayList();
-    
+
     public void menu() {
         Scanner sc = new Scanner(System.in);
         Formulario f1 = new Formulario();
@@ -41,7 +41,17 @@ public class Formulario {
             System.out.println("____________________");
             System.out.print("Para elegir una opción introduzca su número"
                     + " correspondiente: ");
-            numusuario = sc.nextByte();
+            boolean validacion = true;
+            while (!validacion) {
+                try {
+                    numusuario = sc.nextByte();
+                    validacion = true;
+                } catch (InputMismatchException e) {
+                    System.out.println("Introduce el número de la opción del"
+                            + " menú");
+                    sc.nextLine();
+                }
+            }
 
             switch (numusuario) {
                 case 1:
@@ -70,7 +80,7 @@ public class Formulario {
 
         System.out.print("Introduce el nombre del deportista: ");
         d1.setNombre(sc.nextLine());
-        
+
         System.out.print("Introduce su país: ");
         d1.setPais(sc.nextLine());
         boolean validacion = false;
@@ -86,16 +96,17 @@ public class Formulario {
                 sc.nextLine();
             }
         }
+        /*Debe ser un bucle for que itere mientras que numMedallas sea mayor
+        que 0 añadiendo al arraylistMedallas que luego van al objeto deportista*/
         if (d1.getNumMedallas() > 0) {
             Medalla miMedalla = new Medalla();
             Formulario miFormulario = new Formulario();
             miMedalla = miFormulario.pideDatosMedalla();
-            miFormulario.pideDatosMedalla();
+            arrMedallas.
         }
-        listaDeportistas.add(d1);
-        
-        System.out.println("____________________________");
 
+        System.out.println("____________________________");
+        FileOutputStream canal = null;
         try {
             File archivo = new File(d1.getNombre() + ".olimpiadas");
             if (archivo.createNewFile()) {
@@ -103,18 +114,26 @@ public class Formulario {
             } else {
                 System.out.println("El archivo ya existe");
             }
-
-            FileWriter escribir = new FileWriter(archivo);
-            escribir.write(d1.getNombre());
-            escribir.write(d1.getPais());
-            escribir.write(d1.getNumMedallas());
-            System.out.println("Se ha escrito el fichero con éxito");
-            escribir.close();
+            canal = new FileOutputStream(archivo);
+            ObjectOutputStream escribir = new ObjectOutputStream(canal);
+            escribir.writeObject(d1);
+            System.out.println("Se ha escrito el fichero correctamente");
+            
+        
         } catch (IOException e) {
             System.out.println("Un error ha ocurrido de tipo IOException");
             Formulario form = new Formulario();
             form.pideDatosDeportista();
+        } finally{
+            try {
+                canal.close();
+                System.out.println("Flujo de datos cerrado");
+            }catch (IOException e) {
+                System.out.println("Error de tipo IOException en el cierre del"
+                        + " flujo de datos");
+            }
         }
+        
         return d1;
     }
 
@@ -138,10 +157,21 @@ public class Formulario {
             }
         }
         System.out.print("¿Qué tipo de medalla es? Marque su numero");
-        System.out.println("1. ORO");
-        System.out.println("2. PLATA");
-        System.out.println("3. BRONCE");
-        aux = sc.nextInt();
+        System.out.println("1. Oro");
+        System.out.println("2. Plata");
+        System.out.println("3. Bronce");
+        boolean check=false;
+        while(!check) {
+            try{
+               aux = sc.nextInt();
+               check = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Introduce un numero del tipo de medalla"
+                        + " que quieres");
+                sc.nextLine();
+            }
+        }
+        
         switch (aux) {
             case 1: {
                 Tipo tipo = Tipo.ORO;
@@ -170,7 +200,7 @@ public class Formulario {
     public void consultaDeportista(Deportista d, File lectura) {
 
         try {
-            Scanner teclado = new Scanner (System.in);
+            Scanner teclado = new Scanner(System.in);
             System.out.print("Escribe el nombre del deportista que"
                     + " quieres consultar: ");
             String respuesta = teclado.nextLine();
@@ -188,7 +218,7 @@ public class Formulario {
                 Formulario formrecursive = new Formulario();
                 formrecursive.consultaDeportista(d, lectura);
             }
-            
+
         } catch (FileNotFoundException e) {
             System.out.println("No se encuentra el archivo. Quizás no exista "
                     + "en el directorio");
