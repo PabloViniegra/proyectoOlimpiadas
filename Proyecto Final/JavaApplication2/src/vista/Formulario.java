@@ -99,10 +99,16 @@ public class Formulario {
         /*Debe ser un bucle for que itere mientras que numMedallas sea mayor
         que 0 añadiendo al arraylistMedallas que luego van al objeto deportista*/
         if (d1.getNumMedallas() > 0) {
-            Medalla miMedalla = new Medalla();
-            Formulario miFormulario = new Formulario();
-            miMedalla = miFormulario.pideDatosMedalla();
-            arrMedallas.
+            ArrayList<Medalla> arrMedalla = new ArrayList<>();
+            for (int i = 0; i < d1.getNumMedallas(); i++) {
+                Medalla miMedalla = new Medalla();
+                Formulario miFormulario = new Formulario();
+                miMedalla = miFormulario.pideDatosMedalla();
+                arrMedalla.add(miMedalla);
+            }
+            d1.setArrMedalla(arrMedalla);
+
+
         }
 
         System.out.println("____________________________");
@@ -118,22 +124,21 @@ public class Formulario {
             ObjectOutputStream escribir = new ObjectOutputStream(canal);
             escribir.writeObject(d1);
             System.out.println("Se ha escrito el fichero correctamente");
-            
-        
+
         } catch (IOException e) {
             System.out.println("Un error ha ocurrido de tipo IOException");
             Formulario form = new Formulario();
             form.pideDatosDeportista();
-        } finally{
+        } finally {
             try {
                 canal.close();
                 System.out.println("Flujo de datos cerrado");
-            }catch (IOException e) {
+            } catch (IOException e) {
                 System.out.println("Error de tipo IOException en el cierre del"
                         + " flujo de datos");
             }
         }
-        
+
         return d1;
     }
 
@@ -160,18 +165,18 @@ public class Formulario {
         System.out.println("1. Oro");
         System.out.println("2. Plata");
         System.out.println("3. Bronce");
-        boolean check=false;
-        while(!check) {
-            try{
-               aux = sc.nextInt();
-               check = true;
+        boolean check = false;
+        while (!check) {
+            try {
+                aux = sc.nextInt();
+                check = true;
             } catch (InputMismatchException e) {
                 System.out.println("Introduce un numero del tipo de medalla"
                         + " que quieres");
                 sc.nextLine();
             }
         }
-        
+
         switch (aux) {
             case 1: {
                 Tipo tipo = Tipo.ORO;

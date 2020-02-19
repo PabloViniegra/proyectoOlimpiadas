@@ -12,28 +12,31 @@ import java.util.ArrayList;
  *
  * @author pablo
  */
+    
 public class Deportista implements Serializable {
-
+    private ArrayList<Medalla> arrMedalla = new ArrayList<>();
     //Declaración de atributos de la clase Deportista
     private String nombre;
     private String pais;
     private short numMedallas;
-    
     //ArrayList de medallas
-    ArrayList<Medalla> arrMedallas = new ArrayList<>();
+    
 
     //Constructor por defecto
     public Deportista() {
         nombre = "vacío";
         pais = "vacío";
         numMedallas = 0;
+        arrMedalla=null;
     }
 
     //Constructor con parámetros
-    public Deportista(String nombre, String pais, short numMedallas) {
+    public Deportista(String nombre, String pais, short numMedallas, ArrayList
+            <Medalla> arrMedalla) {
         this.nombre = nombre;
         this.pais = pais;
         this.numMedallas = numMedallas;
+        this.arrMedalla = arrMedalla;
     }
 
     //Getters and Setters
@@ -59,6 +62,14 @@ public class Deportista implements Serializable {
 
     public void setNumMedallas(short numMedallas) {
         this.numMedallas = numMedallas;
+    }
+
+    public ArrayList<Medalla> getArrMedalla() {
+        return arrMedalla;
+    }
+
+    public void setArrMedalla(ArrayList<Medalla> arrMedalla) {
+        this.arrMedalla = arrMedalla;
     }
 
 }
