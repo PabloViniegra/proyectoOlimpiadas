@@ -14,13 +14,13 @@ import java.util.ArrayList;
  */
     
 public class Deportista implements Serializable {
-    private ArrayList<Medalla> arrMedalla = new ArrayList<>();
+    
     //Declaración de atributos de la clase Deportista
     private String nombre;
     private String pais;
     private short numMedallas;
     //ArrayList de medallas
-    
+    private ArrayList<Medalla> arrMedalla = new ArrayList<>();
 
     //Constructor por defecto
     public Deportista() {
