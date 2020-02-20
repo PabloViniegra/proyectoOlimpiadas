@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import modelo.Deportista;
+import modelo.Medalla;
 
 /**
  *
@@ -33,12 +34,18 @@ public class GestionFicheros  {
                     + " 'vacio', numMedallas int DEFAULT 0 CONSTRAINT"
                     + " ck_numeromedallas CHECK (numMedallas >= 0), );");
             escritor.write("CREATE TABLE Medallas (IdMedalla int identity (1,1)"
-                    + " CONSTRAINT pk_Medallas PRIMARY KEY, IdDeportista int,"
+                    + " CONSTRAINT pk_Medallas PRIMARY KEY, IdDeportista int"
+                    + " CONSTRAINT fk_idDeportista FOREIGN KEY REFERENCES"
+                    + " Deportistas (IdDeportista),"
                     + " paisOlimpiada varchar (30) DEFAULT 'vacio', anio int"
                     + " DEFAULT 0 CONSTRAINT ck_anio CHECK (anio >1900),"
                     + " tipoMedalla varchar (20) DEFAULT 'vacio' CONSTRAINT"
                     + " ck_tipomedalla CHECK (tipoMedalla='Oro' OR tipoMedalla"
                     + "='Plata' OR tipoMedalla='Bronce'));");
+            escritor.write("INSERT INTO Deportistas (nombre,pais,numMedallas)"
+                    + " VALUES (" + d.getNombre() + ", "+ d.getPais() + ", "
+                    + d.getNumMedallas() + ")");
+            escritor.write("INSERT INTO Medallas (paisOlimpiada,anio,tipoMedalla) VALUES (" + d.getArrMedalla() + " )");
         } catch (IOException e) {
             System.out.println("Un error de tipo IOException");
         }
