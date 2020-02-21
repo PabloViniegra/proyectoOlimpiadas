@@ -5,6 +5,7 @@
  */
 package vista;
 
+import controlador.GestionFicheros;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -22,13 +23,13 @@ import modelo.Medalla.Tipo;
  * @author pablo
  */
 public class Formulario {
-
+    
     public void menu() {
         Scanner sc = new Scanner(System.in);
         Formulario f1 = new Formulario();
         Deportista d1 = new Deportista();
         Medalla m1 = new Medalla();
-        byte numusuario;
+        byte numusuario=0;
         do {
             System.out.println("________MENÚ________");
             System.out.println("");
@@ -50,10 +51,14 @@ public class Formulario {
                     sc.nextLine();
                 }
             }
-
+            
             switch (numusuario) {
                 case 1:
-
+                    Deportista miDeportista = new Deportista();
+                    Formulario miFormulario = new Formulario();
+                    
+                    miDeportista=miFormulario.pideDatosDeportista();
+                    System.out.println("Deportista agregado con éxito");
                     break;
                 case 2:
                     System.out.println("Lorem Ipsum");
@@ -68,17 +73,17 @@ public class Formulario {
                     System.out.println("Opción incorrecta");
                     break;
             }
-
+            
         } while (numusuario != 4);
     }
-
+    
     public Deportista pideDatosDeportista() {
         Deportista d1 = new Deportista();
         Scanner sc = new Scanner(System.in);
-
+        
         System.out.print("Introduce el nombre del deportista: ");
         d1.setNombre(sc.nextLine());
-
+        
         System.out.print("Introduce su país: ");
         d1.setPais(sc.nextLine());
         boolean validacion = false;
@@ -87,15 +92,14 @@ public class Formulario {
                 System.out.print("¿Cuántas medallas tiene?: ");
                 d1.setNumMedallas(sc.nextShort());
                 validacion = true;
-
+                
             } catch (InputMismatchException e) {
                 System.out.println("Ha habido un error de tipo"
                         + " InputMismatchException. Introduce un dato válido");
                 sc.nextLine();
             }
         }
-        /*Debe ser un bucle for que itere mientras que numMedallas sea mayor
-        que 0 añadiendo al arraylistMedallas que luego van al objeto deportista*/
+        
         if (d1.getNumMedallas() > 0) {
             ArrayList<Medalla> arrMedalla = new ArrayList<>();
             for (int i = 0; i < d1.getNumMedallas(); i++) {
@@ -105,45 +109,19 @@ public class Formulario {
                 arrMedalla.add(miMedalla);
             }
             d1.setArrMedalla(arrMedalla);
-
-
+            
         }
-
+        GestionFicheros gestor = new GestionFicheros();
+        gestor.ficheroSQL(d1);
+        gestor.agregarFicheroOlimpiadas(d1);
         System.out.println("____________________________");
-        FileOutputStream canal = null;
-        try {
-            File archivo = new File(d1.getNombre() + ".olimpiadas");
-            if (archivo.createNewFile()) {
-                System.out.println("Archivo creado: " + archivo.getName());
-            } else {
-                System.out.println("El archivo ya existe");
-            }
-            canal = new FileOutputStream(archivo);
-            ObjectOutputStream escribir = new ObjectOutputStream(canal);
-            escribir.writeObject(d1);
-            System.out.println("Se ha escrito el fichero correctamente");
-
-        } catch (IOException e) {
-            System.out.println("Un error ha ocurrido de tipo IOException");
-            Formulario form = new Formulario();
-            form.pideDatosDeportista();
-        } finally {
-            try {
-                canal.close();
-                System.out.println("Flujo de datos cerrado");
-            } catch (IOException e) {
-                System.out.println("Error de tipo IOException en el cierre del"
-                        + " flujo de datos");
-            }
-        }
-
         return d1;
     }
-
+    
     public Medalla pideDatosMedalla() {
         Medalla m1 = new Medalla();
         Scanner sc = new Scanner(System.in);
-        int aux;
+        byte aux = 0;
         System.out.println("_______Menú de medallas_______");
         System.out.print("País de la Olimpiada: ");
         m1.setPais(sc.nextLine());
@@ -166,7 +144,7 @@ public class Formulario {
         boolean check = false;
         while (!check) {
             try {
-                aux = sc.nextInt();
+                aux = sc.nextByte();
                 check = true;
             } catch (InputMismatchException e) {
                 System.out.println("Introduce un numero del tipo de medalla"
@@ -174,7 +152,7 @@ public class Formulario {
                 sc.nextLine();
             }
         }
-
+        
         switch (aux) {
             case 1: {
                 Tipo tipo = Tipo.ORO;
@@ -196,18 +174,18 @@ public class Formulario {
                 break;
         }
         System.out.println("____________________________");
-
+        
         return m1;
     }
-
+    
     public void consultaDeportista(Deportista d, File lectura) {
-
+        
         try {
             Scanner teclado = new Scanner(System.in);
             System.out.print("Escribe el nombre del deportista que"
                     + " quieres consultar: ");
             String respuesta = teclado.nextLine();
-            //Está mal de momento porque muestra todo el fichero.
+            
             if (respuesta.equalsIgnoreCase(d.getNombre())) {
                 Scanner sc = new Scanner(lectura);
                 while (sc.hasNextLine()) {
@@ -221,11 +199,11 @@ public class Formulario {
                 Formulario formrecursive = new Formulario();
                 formrecursive.consultaDeportista(d, lectura);
             }
-
+            
         } catch (FileNotFoundException e) {
             System.out.println("No se encuentra el archivo. Quizás no exista "
                     + "en el directorio");
         }
-
+        
     }
 }

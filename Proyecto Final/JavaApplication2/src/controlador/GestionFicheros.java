@@ -6,18 +6,21 @@
 package controlador;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import modelo.Deportista;
 import modelo.Medalla;
+import vista.Formulario;
 
 /**
  *
- * @author pabli
+ * @author pablo
  */
-public class GestionFicheros  {
-    
-    public void ficheroSQL (Deportista d) {
+public class GestionFicheros {
+
+    public void ficheroSQL(Deportista d) {
         try {
             File ficherosql = new File("olimpiadas.sql");
             if (ficherosql.createNewFile()) {
@@ -43,14 +46,43 @@ public class GestionFicheros  {
                     + " ck_tipomedalla CHECK (tipoMedalla='Oro' OR tipoMedalla"
                     + "='Plata' OR tipoMedalla='Bronce'));");
             escritor.write("INSERT INTO Deportistas (nombre,pais,numMedallas)"
-                    + " VALUES (" + d.getNombre() + ", "+ d.getPais() + ", "
+                    + " VALUES (" + d.getNombre() + ", " + d.getPais() + ", "
                     + d.getNumMedallas() + ")");
-            escritor.write("INSERT INTO Medallas (paisOlimpiada,anio,tipoMedalla) VALUES (" + d.getArrMedalla() + " )");
+            escritor.write("INSERT INTO Medallas (paisOlimpiada,anio,"
+                    + "tipoMedalla) VALUES (" + d.getArrMedalla() + " )");
         } catch (IOException e) {
-            System.out.println("Un error de tipo IOException");
+            System.out.println("Ha ocurrido un error de tipo IOException");
         }
-        
 
     }
     
+    public void agregarFicheroOlimpiadas (Deportista d) {
+        FileOutputStream canal = null;
+        try {
+            File archivo = new File(d.getNombre() + ".olimpiadas");
+            if (archivo.createNewFile()) {
+                System.out.println("Archivo creado: " + archivo.getName());
+            } else {
+                System.out.println("El archivo ya existe");
+            }
+            canal = new FileOutputStream(archivo);
+            ObjectOutputStream escribir = new ObjectOutputStream(canal);
+            escribir.writeObject(d);
+            System.out.println("Se ha escrito el fichero correctamente");
+
+        } catch (IOException e) {
+            System.out.println("Un error ha ocurrido de tipo IOException");
+            Formulario form = new Formulario();
+            form.pideDatosDeportista();
+        } finally {
+            try {
+                canal.close();
+                System.out.println("Flujo de datos cerrado");
+            } catch (IOException e) {
+                System.out.println("Error de tipo IOException en el cierre del"
+                        + " flujo de datos");
+            }
+        }
+    }
+
 }
