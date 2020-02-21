@@ -20,11 +20,8 @@ public class Main {
     public static void main(String[] args) {
         
         Formulario f1 = new Formulario();
-        boolean validacion = false;
-        while (!validacion) {
-            f1.menu();
-            validacion= true;
-        }
+        f1.menu();
+            
             
         
         
