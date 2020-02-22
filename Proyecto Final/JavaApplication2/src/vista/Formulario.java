@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import modelo.Deportista;
+import modelo.EnumTipoMedalla;
 import modelo.Medalla;
-import modelo.Medalla.Tipo;
 
 /**
  *
@@ -22,9 +22,9 @@ public class Formulario {
     public void menu() {
         Scanner sc = new Scanner(System.in);
         Formulario f1 = new Formulario();
-        Deportista d1 = new Deportista();
-        Medalla m1 = new Medalla();
         GestionFicheros gestor = new GestionFicheros();
+        gestor.crearTablas();
+        
         byte numusuario = 0;
         do {
             System.out.println("________MENÚ________");
@@ -51,7 +51,7 @@ public class Formulario {
             switch (numusuario) {
                 
                 case 1:
-                    d1=f1.pideDatosDeportista();
+                    f1.pideDatosDeportista();
                     System.out.println("Deportista agregado con éxito");
                     break;
                 case 2:
@@ -61,7 +61,8 @@ public class Formulario {
                     gestor.consultaDeportista(nombre);
                     break;
                 case 3:
-                    
+                    gestor.generarFicherosHTML();
+                    System.out.println("Ficheros HTML generado.");
                     break;
                 case 4:
                     System.out.println("Cerrando la aplicación");
@@ -74,7 +75,7 @@ public class Formulario {
         } while (numusuario != 4);
     }
     
-    public Deportista pideDatosDeportista() {
+    public void pideDatosDeportista() {
         Deportista d1 = new Deportista();
         Scanner sc = new Scanner(System.in);
         
@@ -112,7 +113,6 @@ public class Formulario {
         gestor.ficheroSQL(d1);
         gestor.agregarFicheroOlimpiadas(d1);
         System.out.println("____________________________");
-        return d1;
     }
     
     public Medalla pideDatosMedalla() {
@@ -152,19 +152,18 @@ public class Formulario {
         
         switch (aux) {
             case 1: {
-                Tipo tipo = Tipo.ORO;
-                System.out.println("Has seleccionado " + tipo.toString());
+                m1.setTipo(EnumTipoMedalla.ORO);
+                System.out.println("Has seleccionado " + m1.getTipo().toString());
                 break;
             }
             case 2: {
-                Tipo tipo = Tipo.PLATA;
-                System.out.println("Has seleccionado " + tipo.toString());
+                m1.setTipo(EnumTipoMedalla.PLATA);
+                System.out.println("Has seleccionado " + m1.getTipo().toString());
                 break;
             }
             case 3: {
-                Tipo tipo = Tipo.BRONCE;
-                System.out.println("Has seleccionado " + tipo.toString());
-                break;
+                m1.setTipo(EnumTipoMedalla.BRONCE);
+                System.out.println("Has seleccionado " + m1.getTipo().toString());
             }
             default:
                 System.out.println("Dato Incorrecto");

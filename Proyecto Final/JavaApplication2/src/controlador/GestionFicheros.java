@@ -10,10 +10,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import modelo.Deportista;
 import modelo.Medalla;
 import vista.Formulario;
@@ -24,22 +27,19 @@ import vista.Formulario;
  */
 public class GestionFicheros {
 
-    public void ficheroSQL(Deportista d) {
+    public void crearTablas() {
+        FileWriter escritor = null;
         try {
             File ficherosql = new File("olimpiadas.sql");
-            if (ficherosql.createNewFile()) {
-                System.out.println("Fichero SQL creado: " + ficherosql.getName());
-            } else {
-                System.out.println("El fichero SQL ya existe");
-            }
-            FileWriter escritor = new FileWriter(ficherosql);
-            escritor.write("CREATE DATABASE MisOlimpiadas");
-            escritor.write("USE MisOlimpiadas");
+            escritor = new FileWriter(ficherosql, true);
+            escritor.write("-- CREACION DE TABLAS \n");
+            escritor.write("CREATE DATABASE MisOlimpiadas \n");
+            escritor.write("USE MisOlimpiadas \n");
             escritor.write("CREATE TABLE Deportistas (IdDeportista int identity"
                     + " (1,1) CONSTRAINT pk_Deportistas PRIMARY KEY,nombre"
                     + " varchar(30) DEFAULT 'vacio', pais varchar (40) DEFAULT"
                     + " 'vacio', numMedallas int DEFAULT 0 CONSTRAINT"
-                    + " ck_numeromedallas CHECK (numMedallas >= 0), );");
+                    + " ck_numeromedallas CHECK (numMedallas >= 0), ); \n");
             escritor.write("CREATE TABLE Medallas (IdMedalla int identity (1,1)"
                     + " CONSTRAINT pk_Medallas PRIMARY KEY, IdDeportista int"
                     + " CONSTRAINT fk_idDeportista FOREIGN KEY REFERENCES"
@@ -48,14 +48,54 @@ public class GestionFicheros {
                     + " DEFAULT 0 CONSTRAINT ck_anio CHECK (anio >1900),"
                     + " tipoMedalla varchar (20) DEFAULT 'vacio' CONSTRAINT"
                     + " ck_tipomedalla CHECK (tipoMedalla='Oro' OR tipoMedalla"
-                    + "='Plata' OR tipoMedalla='Bronce'));");
+                    + "='Plata' OR tipoMedalla='Bronce')); \n");
+            escritor.write("-- FIN CREACION DE TABLAS \n");
+        } catch (IOException e) {
+            System.out.println("Ha ocurrido un error de tipo IOException. "
+                    + e.getMessage());
+        } finally {
+            try {
+                if (escritor != null) {
+                    escritor.close();
+                }
+                System.out.println("Flujo de datos cerrado");
+            } catch (IOException e) {
+                System.out.println("Error de tipo IOException en el cierre del"
+                        + " flujo de datos " + e.getMessage());
+            }
+        }
+    }
+
+    public void ficheroSQL(Deportista d) {
+        FileWriter escritor = null;
+        try {
+            File ficherosql = new File("olimpiadas.sql");
+            escritor = new FileWriter(ficherosql, true);
+            escritor.write("-- COMIENZO DE INSERCIONES PARA " + d.getNombre()
+                    + "\n");
             escritor.write("INSERT INTO Deportistas (nombre,pais,numMedallas)"
-                    + " VALUES (" + d.getNombre() + ", " + d.getPais() + ", "
-                    + d.getNumMedallas() + ")");
-            escritor.write("INSERT INTO Medallas (paisOlimpiada,anio,"
-                    + "tipoMedalla) VALUES (" + d.getArrMedalla() + " )");
+                    + " VALUES (" + "\'" + d.getNombre() + "\'" + ", " + "\'"
+                    + d.getPais() + "\'" + ", "
+                    + d.getNumMedallas() + ") \n");
+
+            for (Medalla m : d.getArrMedalla()) {
+                escritor.write("INSERT INTO Medallas (paisOlimpiada,anio,"
+                        + "tipoMedalla) VALUES (" + m.toSQLString() + " ) \n");
+            }
+            escritor.write("-- FIN DE INSERCIONES PARA " + d.getNombre() + "\n");
+            escritor.flush();
         } catch (IOException e) {
             System.out.println("Ha ocurrido un error de tipo IOException");
+        } finally {
+            try {
+                if (escritor != null) {
+                    escritor.close();
+                }
+                System.out.println("Flujo de datos cerrado");
+            } catch (IOException e) {
+                System.out.println("Error de tipo IOException en el cierre del"
+                        + " flujo de datos " + e.getMessage());
+            }
         }
 
     }
@@ -80,7 +120,9 @@ public class GestionFicheros {
             form.pideDatosDeportista();
         } finally {
             try {
-                canal.close();
+                if (canal != null) {
+                    canal.close();
+                }
                 System.out.println("Flujo de datos cerrado");
             } catch (IOException e) {
                 System.out.println("Error de tipo IOException en el cierre del"
@@ -118,13 +160,16 @@ public class GestionFicheros {
             System.out.println("No se encuentra el archivo. Quizás no exista "
                     + "en el directorio");
         } catch (IOException e) {
-            System.out.println("Ha ocurrido un error de tipo IOException");
+            System.out.println("Ha ocurrido un error de tipo IOException. ");
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
             System.out.println("Ha ocurrido un error de tipo"
                     + " ClassNotFoundException");
         } finally {
             try {
-                canal.close();
+                if (canal != null){
+                    canal.close();
+                }
             } catch (IOException e) {
                 System.out.println("Error de tipo IOException al cerrar el"
                         + " fichero");
@@ -132,42 +177,66 @@ public class GestionFicheros {
         }
 
     }
-    
-    public void generarFicherosHTML (Deportista d) {
-        String aux = d.getNombre();
-        aux = aux.concat(".olimpiadas");
-        File fichero = new File(aux);
-        if (fichero.exists()) {
-            File html = new File(d.getNombre() + ".html");
-            FileOutputStream canal= null;
+
+    public void generarFicherosHTML() {
+        FileInputStream canalOlimpiadas = null;
+        FileWriter escribir = null;
+        File dir = new File(".");
+        Deportista d;
+        
+        File[] files = dir.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.endsWith(".olimpiadas");
+            }
+        });
+        for (File ficheroOlimpiadas : files) {
             
             try {
-                canal = new FileOutputStream(html);
-                ObjectOutputStream escribir = new ObjectOutputStream(canal);
-                escribir.writeUTF("<!DOCTYPE html> <html lang=\"es\"> <head>"
-                        + " <title>" + d.getNombre()+ "</title> <meta charset"
-                                + " = \"UTF-8\"> </head> <style> body"
-                                + " { font-family: Times New Roman;"
-                                + " font-size:16px; background-color:lightgray;"
-                                + "color:white;} <body> <br><br><br> <h4>Nombre:"
-                                + " " + d.getNombre() + "</h4> <br> <h4> Pais:"
-                                        + " " + d.getPais() + "</h4> <br> <h4>"
-                                                + " Número de medallas: "
-                        + d.getNumMedallas() + "</h4> <br> <h4> Medallas:"
-                                + " " + d.getArrMedalla() + "</h4> <br>"
-                                        + " </body> </html>");
-            }catch (IOException e) {
+                canalOlimpiadas = new FileInputStream(ficheroOlimpiadas);
+                ObjectInputStream ficheroOlimpiadasLeido = new ObjectInputStream(canalOlimpiadas);
+                d = (Deportista) ficheroOlimpiadasLeido.readObject();
+
+                File html = new File(d.getNombre() + ".html");
+                escribir = new FileWriter(html);
+                escribir.write("<!DOCTYPE html> <html lang=\"es\">");
+                
+                escribir.write("<head>"
+                        + " <title>" + d.getNombre() + "</title> <meta charset"
+                        + " = \"UTF-8\"> </head> <style> body"
+                        + " { font-family: Times New Roman;"
+                        + " font-size:16px; background-color:black;"
+                        + "color:white;} </style> <body> <br><br><br> <h4>Nombre:"
+                        + " " + d.getNombre() + "</h4> <br> <h4> Pais:"
+                        + " " + d.getPais() + "</h4> <br> <h4>"
+                        + " Número de medallas: "
+                        + d.getNumMedallas() + "</h4> <br>");
+                for (Medalla m : d.getArrMedalla()) {
+                    escribir.write("<h4> Medallas:" + m.toString() + "</h4> <br>");
+                }
+                
+                escribir.write("</body> </html>");
+            } catch (IOException e) {
                 System.out.println("Ha ocurrido un error de tipo IOException");
+                e.printStackTrace();
+            } catch (ClassNotFoundException ex) {
+                // TODO: ELIMINA ESTO POR FAVOR
+                Logger.getLogger(GestionFicheros.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
                 try {
-                    canal.close();
+                    if (canalOlimpiadas != null) {
+                        canalOlimpiadas.close();
+                    }
+                    
+                    if (escribir != null) {
+                        escribir.close();
+                    }
                 } catch (IOException e) {
                     System.out.println("Error de tipo IOException al cerrar el "
                             + "fichero");
+                    e.printStackTrace();
                 }
             }
-        } else {
-            System.out.println("No existen los archivos");
         }
     }
 
