@@ -14,11 +14,14 @@ import modelo.EnumTipoMedalla;
 import modelo.Medalla;
 
 /**
- *
+ *La clase Formulario implementa la vista, esto es, todas las interacciones que
+ * va a realizar el usuario con la aplicación.
  * @author pablo
  */
 public class Formulario {
-    
+    /**
+     * El método menu dibuja el menú de la aplicación.
+     */
     public void menu() {
         Scanner sc = new Scanner(System.in);
         Formulario f1 = new Formulario();
@@ -74,7 +77,10 @@ public class Formulario {
             
         } while (numusuario != 4);
     }
-    
+    /**
+     * El método pideDatosDeportista rellena de información un objeto Deportista
+     * a través del usuario.
+     */
     public void pideDatosDeportista() {
         Deportista d1 = new Deportista();
         Scanner sc = new Scanner(System.in);
@@ -114,7 +120,11 @@ public class Formulario {
         gestor.agregarFicheroOlimpiadas(d1);
         System.out.println("____________________________");
     }
-    
+    /**
+     * El método pideDatosMedalla rellena un objeto de la clase Medalla y lo
+     * devuelve, dado que se la invoca dentro de pideDatosDeportista.
+     * @return 
+     */
     public Medalla pideDatosMedalla() {
         Medalla m1 = new Medalla();
         Scanner sc = new Scanner(System.in);

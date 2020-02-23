@@ -6,8 +6,8 @@
 package modelo;
 
 /**
- *
- * @author agustin
+ *El enumerado del tipo de Medalla para poder elegir el tipo de la medalla.
+ * @author pablo
  */
 public enum EnumTipoMedalla {
     ORO, PLATA, BRONCE;

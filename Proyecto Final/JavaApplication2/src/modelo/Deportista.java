@@ -9,10 +9,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- *
+ *La clase Deportista implementa sus atributos y métodos junto con el arraylist
+ * de Medallas. Tiene getters and setter, así como dos constructores.
  * @author pablo
- */
-    
+ */   
 public class Deportista implements Serializable {
     
     //Declaración de atributos de la clase Deportista
@@ -22,7 +22,9 @@ public class Deportista implements Serializable {
     //ArrayList de medallas
     private ArrayList<Medalla> arrMedalla = new ArrayList<>();
 
-    //Constructor por defecto
+    /**
+     * Constructor por defecto.
+     */
     public Deportista() {
         nombre = "vacío";
         pais = "vacío";
@@ -30,7 +32,14 @@ public class Deportista implements Serializable {
         arrMedalla=null;
     }
 
-    //Constructor con parámetros
+    /**
+     * Constructor con parámetros que construye un objeto de la clase Deportista
+     * con sus atributos.
+     * @param nombre
+     * @param pais
+     * @param numMedallas
+     * @param arrMedalla 
+     */
     public Deportista(String nombre, String pais, short numMedallas, ArrayList
             <Medalla> arrMedalla) {
         this.nombre = nombre;

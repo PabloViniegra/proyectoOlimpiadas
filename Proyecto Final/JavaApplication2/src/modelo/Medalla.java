@@ -8,7 +8,9 @@ package modelo;
 import java.io.Serializable;
 
 /**
- *
+ *La clase Medalla implementa sus atributos y métodos junto con el numerado para
+ * definir el tipo de medalla. Tiene getters and setters, así como dos
+ * constructores.
  * @author pablo.viniegra
  */
 public class Medalla implements Serializable {
@@ -18,17 +20,26 @@ public class Medalla implements Serializable {
     private short anio;
     private EnumTipoMedalla tipo;
 
-    //Constructor por defecto
+    /**
+     * Constructor por defecto.
+     */
     public Medalla() {
         pais = "vacio";
         anio = 0;
+        tipo=null;
 
     }
 
-    //Constructor con parámetros
+    /**
+     * Constructor con parámetros para construir un objeto de tipo Medalla.
+     * @param pais
+     * @param anio
+     * @param tipo 
+     */
     public Medalla(String pais, short anio, EnumTipoMedalla tipo) {
         this.pais = pais;
         this.anio = anio;
+        this.tipo = tipo;
 
     }
 

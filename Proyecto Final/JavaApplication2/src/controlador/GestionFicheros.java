@@ -23,10 +23,17 @@ import vista.Formulario;
 
 /**
  *
- * @author pablo
+ * @author pablo La clase GestionFicheros se encarga de administrar y gestionar
+ * todas las operaciones relacionadas con la creacion, escritura y lectura de
+ * ficheros desde el controlador
  */
 public class GestionFicheros {
 
+    /**
+     * El método crearTablas se encarga de crear la parte estática del fichero
+     * SQL, es decir, el bloque que solo se genera una vez y no va a variar como
+     * son las instrucciones para crear la BBDD y sus tablas.
+     */
     public void crearTablas() {
         FileWriter escritor = null;
         try {
@@ -66,6 +73,13 @@ public class GestionFicheros {
         }
     }
 
+    /**
+     * El método ficheroSQL administra la generación del bloque dinámico del
+     * fichero SQL, básicamente las instrucciones de inserción de deportistas y
+     * medallas.
+     *
+     * @param d
+     */
     public void ficheroSQL(Deportista d) {
         FileWriter escritor = null;
         try {
@@ -85,7 +99,8 @@ public class GestionFicheros {
             escritor.write("-- FIN DE INSERCIONES PARA " + d.getNombre() + "\n");
             escritor.flush();
         } catch (IOException e) {
-            System.out.println("Ha ocurrido un error de tipo IOException");
+            System.out.println("Ha ocurrido un error de tipo IOException. "
+                    + e.getMessage());
         } finally {
             try {
                 if (escritor != null) {
@@ -100,6 +115,13 @@ public class GestionFicheros {
 
     }
 
+    /**
+     * El método agregarFicheroOlimpiadas recibe un parámetro de objeto
+     * Deportista y genera un fichero con extension .olimpiadas por cada objeto
+     * creado.
+     *
+     * @param d
+     */
     public void agregarFicheroOlimpiadas(Deportista d) {
         FileOutputStream canal = null;
         try {
@@ -115,7 +137,8 @@ public class GestionFicheros {
             System.out.println("Se ha escrito el fichero correctamente");
 
         } catch (IOException e) {
-            System.out.println("Un error ha ocurrido de tipo IOException");
+            System.out.println("Un error ha ocurrido de tipo IOException. "
+                    + e.getMessage());
             Formulario form = new Formulario();
             form.pideDatosDeportista();
         } finally {
@@ -126,11 +149,17 @@ public class GestionFicheros {
                 System.out.println("Flujo de datos cerrado");
             } catch (IOException e) {
                 System.out.println("Error de tipo IOException en el cierre del"
-                        + " flujo de datos");
+                        + " flujo de datos. " + e.getMessage());
             }
         }
     }
 
+    /**
+     * El método consultaDeportista recibe un parámetro String que introduce el
+     * usuario y busca el fichero.olimpiadas deseado mostrándolo en consola.
+     *
+     * @param deportista
+     */
     public void consultaDeportista(String deportista) {
         Deportista temporal;
         deportista = deportista.concat(".olimpiadas");
@@ -158,32 +187,40 @@ public class GestionFicheros {
 
         } catch (FileNotFoundException e) {
             System.out.println("No se encuentra el archivo. Quizás no exista "
-                    + "en el directorio");
+                    + "en el directorio. " + e.getMessage());
         } catch (IOException e) {
-            System.out.println("Ha ocurrido un error de tipo IOException. ");
-            e.printStackTrace();
+            System.out.println("Ha ocurrido un error de tipo IOException. "
+                    + e.getMessage());
+
         } catch (ClassNotFoundException e) {
             System.out.println("Ha ocurrido un error de tipo"
-                    + " ClassNotFoundException");
+                    + " ClassNotFoundException. " + e.getMessage());
         } finally {
             try {
-                if (canal != null){
+                if (canal != null) {
                     canal.close();
                 }
             } catch (IOException e) {
                 System.out.println("Error de tipo IOException al cerrar el"
-                        + " fichero");
+                        + " fichero. " + e.getMessage());
             }
         }
 
     }
 
+    /**
+     * El método generarFicherosHTML se encarga de generar un fichero .html de
+     * un deportista por cada fichero .olimpiadas que encuentra en el directorio
+     * . Por lo tanto, es importante que exista previamente el fichero
+     * .olimpiadas.
+     *
+     */
     public void generarFicherosHTML() {
         FileInputStream canalOlimpiadas = null;
         FileWriter escribir = null;
         File dir = new File(".");
         Deportista d;
-        
+
         File[] files = dir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
@@ -191,16 +228,17 @@ public class GestionFicheros {
             }
         });
         for (File ficheroOlimpiadas : files) {
-            
+
             try {
                 canalOlimpiadas = new FileInputStream(ficheroOlimpiadas);
-                ObjectInputStream ficheroOlimpiadasLeido = new ObjectInputStream(canalOlimpiadas);
+                ObjectInputStream ficheroOlimpiadasLeido = new 
+                ObjectInputStream(canalOlimpiadas);
                 d = (Deportista) ficheroOlimpiadasLeido.readObject();
 
                 File html = new File(d.getNombre() + ".html");
                 escribir = new FileWriter(html);
                 escribir.write("<!DOCTYPE html> <html lang=\"es\">");
-                
+
                 escribir.write("<head>"
                         + " <title>" + d.getNombre() + "</title> <meta charset"
                         + " = \"UTF-8\"> </head> <style> body"
@@ -214,27 +252,28 @@ public class GestionFicheros {
                 for (Medalla m : d.getArrMedalla()) {
                     escribir.write("<h4> Medallas:" + m.toString() + "</h4> <br>");
                 }
-                
+
                 escribir.write("</body> </html>");
             } catch (IOException e) {
-                System.out.println("Ha ocurrido un error de tipo IOException");
-                e.printStackTrace();
-            } catch (ClassNotFoundException ex) {
-                // TODO: ELIMINA ESTO POR FAVOR
-                Logger.getLogger(GestionFicheros.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("Ha ocurrido un error de tipo IOException. "
+                        + e.getMessage());
+
+            } catch (ClassNotFoundException e) {
+                System.out.println("Ha ocurrido un error de tipo"
+                        + " ClassNotFoundException. " + e.getMessage());
+
             } finally {
                 try {
                     if (canalOlimpiadas != null) {
                         canalOlimpiadas.close();
                     }
-                    
+
                     if (escribir != null) {
                         escribir.close();
                     }
                 } catch (IOException e) {
                     System.out.println("Error de tipo IOException al cerrar el "
-                            + "fichero");
-                    e.printStackTrace();
+                            + "fichero. " + e.getMessage());
                 }
             }
         }

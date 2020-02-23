@@ -9,12 +9,13 @@ package controlador;
 import vista.Formulario;
 
 /**
- *
+ *La clase encargada de ejecutar la aplicación.
  * @author pablo
  */
 public class Main {
 
     /**
+     * El método main llama al menú de la vista instanciando la clase Formulario.
      * @param args the command line arguments
      */
     public static void main(String[] args) {
