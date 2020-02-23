@@ -231,7 +231,7 @@ public class GestionFicheros {
 
             try {
                 canalOlimpiadas = new FileInputStream(ficheroOlimpiadas);
-                ObjectInputStream ficheroOlimpiadasLeido = new 
+                ObjectInputStream ficheroOlimpiadasLeido = new
                 ObjectInputStream(canalOlimpiadas);
                 d = (Deportista) ficheroOlimpiadasLeido.readObject();
 
@@ -244,13 +244,15 @@ public class GestionFicheros {
                         + " = \"UTF-8\"> </head> <style> body"
                         + " { font-family: Times New Roman;"
                         + " font-size:16px; background-color:black;"
-                        + "color:white;} </style> <body> <br><br><br> <h4>Nombre:"
+                        + "color:white;margin:auto;text-align:center;}"
+                        + " </style> <body> <br><br><br> <h4>Nombre:"
                         + " " + d.getNombre() + "</h4> <br> <h4> Pais:"
                         + " " + d.getPais() + "</h4> <br> <h4>"
                         + " Número de medallas: "
                         + d.getNumMedallas() + "</h4> <br>");
                 for (Medalla m : d.getArrMedalla()) {
-                    escribir.write("<h4> Medallas:" + m.toString() + "</h4> <br>");
+                    escribir.write("<h4> Medallas:" + m.toString() +
+                            "</h4> <br>");
                 }
 
                 escribir.write("</body> </html>");
