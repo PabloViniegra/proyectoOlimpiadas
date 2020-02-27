@@ -153,21 +153,18 @@ public class GestionFicheros {
     }
 
     /**
-     * El método consultaDeportista recibe un parámetro String que introduce el
-     * usuario y busca el fichero.olimpiadas deseado mostrándolo en consola.
+     * El método consultaDeportista busca el fichero.olimpiadas deseado
+     * mostrándolo en consola y lo pone en disposición de otros métodos.
      *
-     * @param deportista
+     * @param f
      */
-    public void consultaDeportista(String deportista) {
+    public void consultaDeportista(File f) {
         Deportista temporal;
-        deportista = deportista.concat(".olimpiadas");
-        File lectura = new File(deportista);
-        FileInputStream canal = null;
+        FileInputStream canal=null;
         try {
             Scanner teclado = new Scanner(System.in);
-            canal = new FileInputStream(lectura);
+            canal = new FileInputStream(f);
             ObjectInputStream ficheroleido = new ObjectInputStream(canal);
-            File f = new File(deportista);
             if (f.exists()) {
                 temporal = (Deportista) ficheroleido.readObject();
                 System.out.println("Nombre: " + temporal.getNombre());
@@ -180,7 +177,7 @@ public class GestionFicheros {
                 System.out.println("No se ha encontrado el nombre del"
                         + " Deportista. Prueba otra vez");
                 GestionFicheros gestor = new GestionFicheros();
-                gestor.consultaDeportista(deportista);
+                gestor.consulta(teclado.nextLine());
             }
 
         } catch (FileNotFoundException e) {
@@ -229,8 +226,7 @@ public class GestionFicheros {
 
             try {
                 canalOlimpiadas = new FileInputStream(ficheroOlimpiadas);
-                ObjectInputStream ficheroOlimpiadasLeido = new
-                ObjectInputStream(canalOlimpiadas);
+                ObjectInputStream ficheroOlimpiadasLeido = new ObjectInputStream(canalOlimpiadas);
                 d = (Deportista) ficheroOlimpiadasLeido.readObject();
 
                 File html = new File(d.getNombre() + ".html");
@@ -249,8 +245,8 @@ public class GestionFicheros {
                         + " Número de medallas: "
                         + d.getNumMedallas() + "</h4> <br>");
                 for (Medalla m : d.getArrMedalla()) {
-                    escribir.write("<h4> Medallas:" + m.toString() +
-                            "</h4> <br>");
+                    escribir.write("<h4> Medallas:" + m.toString()
+                            + "</h4> <br>");
                 }
 
                 escribir.write("</body> </html>");
@@ -278,5 +274,106 @@ public class GestionFicheros {
             }
         }
     }
+    /**
+     * El método consultya es un método intermedio preparado para leer un
+     * fichero y devolverlo. Recibe un String como parámetro donde se le indica 
+     * el nombre a buscar.
+     * @param deportista
+     * @return 
+     */
+    public File consulta(String deportista) {
 
+        Deportista temporal;
+        deportista = deportista.concat(".olimpiadas");
+        File lectura = new File(deportista);
+        FileInputStream canal = null;
+        File f = null;
+        try {
+            Scanner teclado = new Scanner(System.in);
+            canal = new FileInputStream(lectura);
+            ObjectInputStream ficheroleido = new ObjectInputStream(canal);
+            f = new File(deportista);
+            
+            
+        } catch (FileNotFoundException e) {
+            System.out.println("No se encuentra el archivo. Quizás no exista "
+                    + "en el directorio. " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("Ha ocurrido un error de tipo IOException. "
+                    + e.getMessage());
+        } finally {
+            try {
+                if (canal != null) {
+                    canal.close();
+                }
+            } catch (IOException e) {
+                System.out.println("Error de tipo IOException al cerrar el"
+                        + " fichero. " + e.getMessage());
+            }
+        }
+        
+        return f;
+    }
+    /**
+     * Recibe un fichero consultado con el nombre y genera un fichero html.
+     * @param f 
+     */
+    public void generarFicheroHTMLsolo (File f) {
+        Deportista temporal;
+        FileInputStream canal=null;
+        FileWriter escribir = null;
+        try {
+            Scanner teclado = new Scanner(System.in);
+            canal = new FileInputStream(f);
+            ObjectInputStream ficheroleido = new ObjectInputStream(canal);
+            if (f.exists()) {
+                temporal = (Deportista) ficheroleido.readObject();
+               File html = new File(temporal.getNombre() + ".html");
+                escribir = new FileWriter(html);
+                escribir.write("<!DOCTYPE html> <html lang=\"es\">");
+
+                escribir.write("<head>"
+                        + " <title>" + temporal.getNombre() + "</title> <meta charset"
+                        + " = \"UTF-8\"> </head> <style> body"
+                        + " { font-family: Times New Roman;"
+                        + " font-size:16px; background-color:black;"
+                        + "color:white;margin:auto;text-align:center;}"
+                        + " </style> <body> <br><br><br> <h4>Nombre:"
+                        + " " + temporal.getNombre() + "</h4> <br> <h4> Pais:"
+                        + " " + temporal.getPais() + "</h4> <br> <h4>"
+                        + " Número de medallas: "
+                        + temporal.getNumMedallas() + "</h4> <br>");
+                for (Medalla m : temporal.getArrMedalla()) {
+                    escribir.write("<h4> Medallas:" + m.toString()
+                            + "</h4> <br>");
+                }
+
+            } else {
+                System.out.println("No se ha encontrado el nombre del"
+                        + " Deportista. Prueba otra vez");
+                GestionFicheros gestor = new GestionFicheros();
+                gestor.consulta(teclado.nextLine());
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println("No se encuentra el archivo. Quizás no exista "
+                    + "en el directorio. " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("Ha ocurrido un error de tipo IOException. "
+                    + e.getMessage());
+
+        } catch (ClassNotFoundException e) {
+            System.out.println("Ha ocurrido un error de tipo"
+                    + " ClassNotFoundException. " + e.getMessage());
+        } finally {
+            try {
+                if (canal != null) {
+                    canal.close();
+                }
+            } catch (IOException e) {
+                System.out.println("Error de tipo IOException al cerrar el"
+                        + " fichero. " + e.getMessage());
+            }
+        }
+    }
 }

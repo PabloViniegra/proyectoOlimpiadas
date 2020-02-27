@@ -44,26 +44,45 @@ public class Medalla implements Serializable {
     }
 
     //Getters and Setters
+    /**
+     * Devuelve el atributo pais de un objeto Medalla.
+     * @return 
+     */
     public String getPais() {
         return pais;
     }
-
+    /**
+     * Establece el atributo pais de un objeto Medalla.
+     * @param pais 
+     */
     public void setPais(String pais) {
         this.pais = pais;
     }
-
+    /**
+     * Devuelve el atributo año de un objeto Medalla.
+     * @return 
+     */
     public short getAnio() {
         return anio;
     }
-
+    /**
+     * Establece el atributo año de un objeto Medalla.
+     * @param anio 
+     */
     public void setAnio(short anio) {
         this.anio = anio;
     }
-
+    /**
+     * Devuelve el atributo tipo de medalla de un objeto Medalla.
+     * @return 
+     */
     public EnumTipoMedalla getTipo() {
         return tipo;
     }
-
+    /**
+     * Establece el atributo tipo de medalla de un objeto Medalla.
+     * @param tipo 
+     */
     public void setTipo(EnumTipoMedalla tipo) {
         this.tipo = tipo;
     }

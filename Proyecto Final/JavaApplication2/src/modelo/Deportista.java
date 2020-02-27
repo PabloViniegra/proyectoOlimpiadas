@@ -49,34 +49,59 @@ public class Deportista implements Serializable {
     }
 
     //Getters and Setters
+    /**
+     * Devuelve el atributo nombre de un objeto Deportista.
+     * @return 
+     */
     public String getNombre() {
         return nombre;
     }
-
+    /**
+     * Establece el atributo nombre de un objeto Deportista.
+     * @param nombre 
+     */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
+    /**
+     * Devuelve el atributo pais de un objeto Deportista.
+     * @return 
+     */
     public String getPais() {
         return pais;
     }
-
+    /**
+     * Establece el atributo pais de un objeto Deportista.
+     * @param pais 
+     */
     public void setPais(String pais) {
         this.pais = pais;
     }
-
+    /**
+     * Devuelve el atributo numero de medallas de un objeto Deportista.
+     * @return 
+     */
     public short getNumMedallas() {
         return numMedallas;
     }
-
+    /**
+     * Establece el atributo numero de medallas de un objeto Deportista.
+     * @param numMedallas 
+     */
     public void setNumMedallas(short numMedallas) {
         this.numMedallas = numMedallas;
     }
-
+    /**
+     * Devuelve el arraylist de medallas de un objeto Deportista.
+     * @return 
+     */
     public ArrayList<Medalla> getArrMedalla() {
         return arrMedalla;
     }
-
+    /**
+     * Establece el arraylist de medallas de un objeto Deportista.
+     * @param arrMedalla 
+     */
     public void setArrMedalla(ArrayList<Medalla> arrMedalla) {
         this.arrMedalla = arrMedalla;
     }

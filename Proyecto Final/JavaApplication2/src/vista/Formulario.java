@@ -6,6 +6,7 @@
 package vista;
 
 import controlador.GestionFicheros;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -61,11 +62,36 @@ public class Formulario {
                     System.out.print("Introduzca nombre del deportista a "
                             + "consultar: ");
                     String nombre = sc.nextLine();
-                    gestor.consultaDeportista(nombre);
+                    File fich = gestor.consulta(nombre);
+                    gestor.consultaDeportista(fich);
                     break;
                 case 3:
-                    gestor.generarFicherosHTML();
-                    System.out.println("Ficheros HTML generado.");
+                    System.out.println("¿Cómo quieres generar el HTML?");
+                    System.out.println("1. Generar un solo fichero HTML");
+                    System.out.println("2. Generar todos los ficheros");
+                    int aux=0;
+                    boolean check = false;
+                    while (!check) {
+                        try {
+                          aux = sc.nextInt();
+                          check = true;
+                        } catch (InputMismatchException e) {
+                            System.out.println("Por favor, ingrese un número");
+                        } finally {
+                            sc.nextLine();
+                        }
+                    }
+                    if (aux==1) {
+                        System.out.print("Introduzca el nombre del deportista: ");
+                        String name = sc.nextLine();
+                        File miFichero = gestor.consulta(name);
+                        gestor.generarFicheroHTMLsolo(miFichero);
+                        System.out.println("HTML generado en el directorio");
+                    } else if (aux==2) {
+                        gestor.generarFicherosHTML();
+                        System.out.println("Ficheros HTML generados");
+                    }
+                    
                     break;
                 case 4:
                     System.out.println("Cerrando la aplicación");
